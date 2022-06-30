@@ -19,7 +19,7 @@
               answer: number;
           }
         | undefined = solGenerator();
-
+    let correctans: boolean | undefined = undefined;
     let correct = 0;
     let total = 0;
 
@@ -32,12 +32,16 @@
             if (done === false) {
                 if (key != -1)
                     if (q && key === q.answer) {
-                        if (key != -1) correct++;
+                        correctans = true;
+                        correct++;
                         total++;
                     } else {
+                        correctans = false;
                         total++;
                     }
-                q = undefined;
+                requestAnimationFrame(() => {
+                    q = undefined;
+                });
                 setTimeout(() => {
                     const br = solGenerator();
                     done = br.done;
@@ -53,6 +57,7 @@
                                 : -100
                             : 0,
                     ];
+                    correctans = undefined;
                     q = br;
                 }, 300);
             }
@@ -74,6 +79,8 @@
         {#if q}
             <p
                 class={"elem"}
+                class:red={correctans === false}
+                class:green={correctans === true}
                 in:fade={{ duration: 200 }}
                 out:fly={{
                     duration: 300,
@@ -100,12 +107,12 @@
                 : "blue"}
             class:ans={true}
             style={index == 0
-                ? "margin: 0rem; top: 5vh; left: 50vw; transform: translate(-50%, -0%);"
+                ? "top: 5vh; left: 50vw; transform: translate(-50%, -0%);"
                 : index == 1
-                ? "margin: 0rem; top: 50vh; left: 95vw; transform: translate(-100%, -50%);"
+                ? "top: 50vh; left: 95vw; transform: translate(-100%, -50%);"
                 : index == 2
-                ? "margin: 0rem; top: 95vh; left: 50vw; transform: translate(-50%, -100%);"
-                : "margin: 0rem; top: 50vh; left: 5vw; transform: translate(-0%, -50%);"}
+                ? "top: 95vh; left: 50vw; transform: translate(-50%, -100%);"
+                : "top: 50vh; left: 5vw; transform: translate(-0%, -50%);"}
         >
             <p>{ans}</p>
         </button>
@@ -117,7 +124,9 @@
     button {
         outline: none;
         border: none;
-        background: none;
+        background: transparent;
+        margin: 0px;
+        padding: 0px;
     }
     .red {
         color: hsl(0, 100%, 50%);
@@ -125,12 +134,18 @@
     .blue {
         color: hsl(240, 100%, 50%);
     }
+    .green {
+        color: hsl(120, 100%, 40%);
+    }
     .black {
         color: black;
+        /* color: white; */
     }
     p {
         font-family: Roboto;
         font-size: 4vw;
+        margin: 0px;
+        padding: 0px;
     }
     #correct {
         position: fixed;
@@ -144,6 +159,8 @@
         position: fixed;
         top: 50vh;
         left: 50vw;
+        margin: 0rem;
+        padding: 0rem;
     }
     .elem {
         position: fixed;
