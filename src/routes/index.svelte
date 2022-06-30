@@ -107,6 +107,7 @@
     }
     p {
         font-family: Roboto;
+        font-size: 4vw;
     }
     #correct {
         position: fixed;
