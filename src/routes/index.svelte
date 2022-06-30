@@ -1,3 +1,6 @@
+<!-- <script context="module">
+    export const prerender = false;
+</script> -->
 <script lang="ts">
     import Compound from "$lib/compound.svelte";
     import solGenerator from "$lib/solgenerator";
@@ -22,8 +25,10 @@
 
     let [x, y] = [0, 0];
 
-    if (browser)
-        detect((key) => {
+    let detecterFunc: (key: number) => void;
+
+    if (browser) {
+        detecterFunc = (key: number) => {
             if (done === false) {
                 if (key != -1)
                     if (q && key === q.answer) {
@@ -51,7 +56,9 @@
                     q = br;
                 }, 300);
             }
-        });
+        };
+        detect(detecterFunc);
+    }
     let answers: string[] = [];
     $: if (q !== undefined) {
         answers = q.options;
@@ -80,7 +87,10 @@
     {/if}
 
     {#each answers as ans, index}
-        <p
+        <button
+            on:click={() => {
+                if (detecterFunc) detecterFunc(index);
+            }}
             class={index == 0
                 ? "black"
                 : index == 1
@@ -97,13 +107,18 @@
                 ? "margin: 0rem; top: 95vh; left: 50vw; transform: translate(-50%, -100%);"
                 : "margin: 0rem; top: 50vh; left: 5vw; transform: translate(-0%, -50%);"}
         >
-            {ans}
-        </p>
+            <p>{ans}</p>
+        </button>
     {/each}
 {/if}
 
 <style>
     @import url("https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono:wght@300;700&display=swap");
+    button {
+        outline: none;
+        border: none;
+        background: none;
+    }
     .red {
         color: hsl(0, 100%, 50%);
     }
