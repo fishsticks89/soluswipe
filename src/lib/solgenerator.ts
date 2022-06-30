@@ -1,5 +1,5 @@
 import type { generator } from "./generator";
-import table, { soluble, insoluble, semisoluble, nonexistent, done, xLabels, yLabels } from "./sol"
+import table, { done, xLabels, yLabels } from "./sol"
 
 let tb = table;
 

@@ -4,41 +4,41 @@
   export let ions: ion[];
   if (ions.length != 2) console.error("ion issues guy");
 
-  const gcd = (num1: number, num2: number): number => {
-    // if num2 is 0 return num1;
-    if (num2 === 0) {
-      return num1;
+  const gcd = (x: number, y: number) => {
+    x = Math.abs(x);
+    y = Math.abs(y);
+    while (y) {
+      let t = y;
+      y = x % y;
+      x = t;
     }
-
-    // call the same function recursively
-    return gcd(num2, num1 % num2);
-  };
-  let lcm = (n1: number, n2: number) => {
-    // Find the gcd first
-    let thegcd = gcd(n1, n2);
-
-    //then calculate the lcm
-    return (n1 * n2) / thegcd;
+    return x;
   };
 
-  const deltaCoulombs = gcd(Math.abs(ions[0].charge), Math.abs(ions[1].charge));
+  let gcf: number;
+  $: gcf = gcd(Math.abs(ions[0].charge), Math.abs(ions[1].charge));
+
+  $: {
+    console.log(ions.map((i) => i.charge));
+    console.log(gcf);
+  }
 </script>
 
-{#if Math.abs(deltaCoulombs % ions[1].charge) + 1 > 1 && ions[0].isCompound}
+{#if Math.abs(Math.abs(ions[1].charge)) / gcf > 1 && ions[0].isCompound}
   (<Ion ion={ions[0]} />)
 {:else}
   <Ion ion={ions[0]} />
 {/if}
-{#if (deltaCoulombs % ions[1].charge) + 1 > 1}
-  <sub>{(deltaCoulombs % ions[1].charge) + 1}</sub>
+{#if Math.abs(ions[1].charge) / gcf > 1}
+  <sub>{Math.abs(ions[1].charge) / gcf}</sub>
 {/if}
-{#if Math.abs(deltaCoulombs % ions[0].charge) + 1 > 1 && ions[1].isCompound}
+{#if Math.abs(ions[0].charge) / gcf > 1 && ions[1].isCompound}
   (<Ion ion={ions[1]} />)
 {:else}
   <Ion ion={ions[1]} />
 {/if}
-{#if (deltaCoulombs % ions[0].charge) + 1 > 1}
-  <sub>{(deltaCoulombs % ions[0].charge) + 1}</sub>
+{#if Math.abs(ions[0].charge) / gcf > 1}
+  <sub>{Math.abs(ions[0].charge) / gcf}</sub>
 {/if}
 
 <style>
