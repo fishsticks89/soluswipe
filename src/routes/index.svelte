@@ -59,7 +59,7 @@
 </script>
 
 {#if done}
-    <p class={"elem"}>{Math.round((correct / total) * 1000) / 10}%</p>
+    <p class={"elem"}>🌟 {Math.round((correct / total) * 1000) / 10}% 🌟</p>
 {:else}
     <p id={"correct"}>{Math.round((correct / total) * 1000) / 10}%</p>
 
