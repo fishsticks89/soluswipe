@@ -23,9 +23,16 @@ const solGenerator: generator = () => {
 
     cleanup();
 
-    const done = tb.filter(e => e.filter(f => f === 0).length === 0).length === 0;
+    let soldone = true;
 
-    return {options, question, answer, done}
+    tb.forEach((y) => {
+        y.forEach((x) => {
+            if (x !== done)
+                soldone = false;
+        })
+    })
+
+    return {options, question, answer, done: soldone}
 }
 
 export default solGenerator;
